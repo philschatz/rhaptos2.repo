@@ -271,16 +271,10 @@ class RolesModal extends BaseModal
     entries = data
     @collection = new RoleCollection(entries)
     @$('.modal-body').html(Mustache.to_html(Templates.ROLES, {roles_vocabulary: ROLES}))
-
-    # Create a row for entering new entries to the roles listing.
-    entry = new RoleEntry()
-    $addEntry = $(Mustache.to_html(Templates.ROLES_ADD_ENTRY, @_prepareEntryForRendering(entry)))
-    $('input[type="checkbox"]', $addEntry).click(@_roleSelectedHandler(entry))
-    $('.role-add-action', $addEntry).click(@_roleAddHandler(entry))
-    @$('tbody').append($addEntry)
-
     for entry in @collection.entries
       @renderEntry(entry)
+    # Bind the add person form to the handler.
+    @$('form[name="role-entry-form"]').submit(@_roleAddHandler)
 
   loadData: ->
     # XXX The best way to get the module ID at this time is to pull it out
@@ -301,7 +295,8 @@ class RolesModal extends BaseModal
     $('input[type="checkbox"]', $renderedEntry).click(@_roleSelectedHandler(entry))
     $('.role-removal-action', $renderedEntry).click(@_roleRemovalHandler(entry))
     # Append the entry to the modal.
-    @$('tbody tr:last').before($renderedEntry)
+    $tbody = @$('tbody')
+    $tbody.append($renderedEntry)
 
   submitHandler: (event) =>
     # XXX The best way to get the module ID at this time is to pull it out
@@ -337,28 +332,21 @@ class RolesModal extends BaseModal
     $.extend(data, {roles: roles})
     return data
 
-  _roleAddHandler: (entry) ->
+  _roleAddHandler: (event) =>
     ###
-      Create an event handler that will add a RoleEntry
+      An event handler that will add a RoleEntry
       to the collection and render it.
     ###
-    # XXX What I'm doing here is horrible... seriously...
-    #     The loosely coupled nature of the following statements
-    #     is aweful.
-    eventHandler = (event) =>
-      # Grab the name from the input field
-      $row = $(event.target).parents('tr')
-      $nameField = $row.find('input[name="name"]')
-      name = $nameField.val()
-      # Add the entry to the collection.
-      _entry = @collection.add(new RoleEntry(name, entry.roles))
-      console.log("Added '#{name}' to the roles collection.")
-      @renderEntry(_entry)
-      # Reset the entry object and the input fields.
-      $nameField.val('')
-      $row.find('input[type="checkbox"]').attr('checked', false)
-      entry.roles = []
-    return eventHandler
+    event.preventDefault()
+    # Grab the name from the input field
+    $nameField = $('input[name="name"]', event.target)
+    name = $nameField.val()
+    # Add the entry to the collection.
+    entry = @collection.add(new RoleEntry(name))
+    console.log("Added '#{name}' to the roles collection.")
+    @renderEntry(entry)
+    # Reset the entry object and the input fields.
+    $nameField.val('')
 
   _roleSelectedHandler: (entry) ->
     ###

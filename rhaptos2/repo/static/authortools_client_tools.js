@@ -369,30 +369,26 @@
     RolesModal.prototype.selector = '#roles-modal';
 
     function RolesModal() {
+      this._roleAddHandler = __bind(this._roleAddHandler, this);
+
       this.submitHandler = __bind(this.submitHandler, this);
       RolesModal.__super__.constructor.call(this);
       this.$('button[type="submit"]').click(this.submitHandler);
     }
 
     RolesModal.prototype.render = function(data) {
-      var $addEntry, entries, entry, _i, _len, _ref, _results;
+      var entries, entry, _i, _len, _ref;
       entries = data;
       this.collection = new RoleCollection(entries);
       this.$('.modal-body').html(Mustache.to_html(Templates.ROLES, {
         roles_vocabulary: ROLES
       }));
-      entry = new RoleEntry();
-      $addEntry = $(Mustache.to_html(Templates.ROLES_ADD_ENTRY, this._prepareEntryForRendering(entry)));
-      $('input[type="checkbox"]', $addEntry).click(this._roleSelectedHandler(entry));
-      $('.role-add-action', $addEntry).click(this._roleAddHandler(entry));
-      this.$('tbody').append($addEntry);
       _ref = this.collection.entries;
-      _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         entry = _ref[_i];
-        _results.push(this.renderEntry(entry));
+        this.renderEntry(entry);
       }
-      return _results;
+      return this.$('form[name="role-entry-form"]').submit(this._roleAddHandler);
     };
 
     RolesModal.prototype.loadData = function() {
@@ -406,12 +402,13 @@
     };
 
     RolesModal.prototype.renderEntry = function(entry) {
-      var $renderedEntry, data;
+      var $renderedEntry, $tbody, data;
       data = this._prepareEntryForRendering(entry);
       $renderedEntry = $(Mustache.to_html(Templates.ROLES_NAME_ENTRY, data));
       $('input[type="checkbox"]', $renderedEntry).click(this._roleSelectedHandler(entry));
       $('.role-removal-action', $renderedEntry).click(this._roleRemovalHandler(entry));
-      return this.$('tbody tr:last').before($renderedEntry);
+      $tbody = this.$('tbody');
+      return $tbody.append($renderedEntry);
     };
 
     RolesModal.prototype.submitHandler = function(event) {
@@ -469,27 +466,20 @@
       return data;
     };
 
-    RolesModal.prototype._roleAddHandler = function(entry) {
+    RolesModal.prototype._roleAddHandler = function(event) {
       /*
-            Create an event handler that will add a RoleEntry
+            An event handler that will add a RoleEntry
             to the collection and render it.
       */
 
-      var eventHandler,
-        _this = this;
-      eventHandler = function(event) {
-        var $nameField, $row, name, _entry;
-        $row = $(event.target).parents('tr');
-        $nameField = $row.find('input[name="name"]');
-        name = $nameField.val();
-        _entry = _this.collection.add(new RoleEntry(name, entry.roles));
-        console.log("Added '" + name + "' to the roles collection.");
-        _this.renderEntry(_entry);
-        $nameField.val('');
-        $row.find('input[type="checkbox"]').attr('checked', false);
-        return entry.roles = [];
-      };
-      return eventHandler;
+      var $nameField, entry, name;
+      event.preventDefault();
+      $nameField = $('input[name="name"]', event.target);
+      name = $nameField.val();
+      entry = this.collection.add(new RoleEntry(name));
+      console.log("Added '" + name + "' to the roles collection.");
+      this.renderEntry(entry);
+      return $nameField.val('');
     };
 
     RolesModal.prototype._roleSelectedHandler = function(entry) {

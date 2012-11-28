@@ -114,6 +114,15 @@
         </tbody>\
       </table>\
     </form>\
+    <form name="role-entry-form">\
+      <legend>Add a person to the roles</legend>\
+      <div class="input-append">\
+        <input type="text" name="name"\
+               class="span2"\
+               placeholder="Type a name...">\
+        <button type="submit" class="btn"><i class="icon-plus"></i></button>\
+      </div>\
+    </form>\
   </div>';
 
   exports.SHARING = '\
