@@ -275,6 +275,27 @@ class RolesModal extends BaseModal
       @renderEntry(entry)
     # Bind the add person form to the handler.
     @$('form[name="role-entry-form"]').submit(@_roleAddHandler)
+    @$('form[name="role-entry-form"]').find('input[name="name"]').autocomplete(
+      source: (request, response) ->
+        # Query the user database for names.
+        jsonpCallback = 'userSearchCallback'
+        userSearchRequest = $.ajax(
+          type: 'GET'
+          # XXX The URL is hardcoded because I haven't taken the time to find
+          #     where the user app url is exposed or where to expose it.
+          url: 'http://localhost:8000/users/?search=' + request.term
+          dataType: 'jsonp'
+          jsonpCallback: jsonpCallback
+        )
+        $.when(userSearchRequest).done( (data) ->
+          suggestions = []
+          for user in data
+            label = user['fullname']
+            value = user['user_id']
+            suggestions.push({label: label, value: value})
+          response(suggestions)
+        )
+    )
 
   loadData: ->
     # XXX The best way to get the module ID at this time is to pull it out
