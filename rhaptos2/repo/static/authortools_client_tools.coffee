@@ -279,21 +279,21 @@ class RolesModal extends BaseModal
       source: (request, response) ->
         # Query the user database for names.
         jsonpCallback = 'userSearchCallback'
-        userSearchRequest = $.ajax(
+        $.ajax({
           type: 'GET'
           # XXX The URL is hardcoded because I haven't taken the time to find
           #     where the user app url is exposed or where to expose it.
           url: 'http://localhost:8000/users/?search=' + request.term
           dataType: 'jsonp'
           jsonpCallback: jsonpCallback
-        )
-        $.when(userSearchRequest).done( (data) ->
-          suggestions = []
-          for user in data
-            label = user['fullname']
-            value = user['user_id']
-            suggestions.push({label: label, value: value})
-          response(suggestions)
+          success: (data) ->
+            suggestions = []
+            for user in data
+              label = user['fullname']
+              value = user['user_id']
+              suggestions.push({label: label, value: value})
+            response(suggestions)
+          }
         )
     )
 

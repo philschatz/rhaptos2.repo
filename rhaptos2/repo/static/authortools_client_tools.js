@@ -391,27 +391,27 @@
       this.$('form[name="role-entry-form"]').submit(this._roleAddHandler);
       return this.$('form[name="role-entry-form"]').find('input[name="name"]').autocomplete({
         source: function(request, response) {
-          var jsonpCallback, userSearchRequest;
+          var jsonpCallback;
           jsonpCallback = 'userSearchCallback';
-          userSearchRequest = $.ajax({
+          return $.ajax({
             type: 'GET',
             url: 'http://localhost:8000/users/?search=' + request.term,
             dataType: 'jsonp',
-            jsonpCallback: jsonpCallback
-          });
-          return $.when(userSearchRequest).done(function(data) {
-            var label, suggestions, user, value, _j, _len1;
-            suggestions = [];
-            for (_j = 0, _len1 = data.length; _j < _len1; _j++) {
-              user = data[_j];
-              label = user['fullname'];
-              value = user['user_id'];
-              suggestions.push({
-                label: label,
-                value: value
-              });
+            jsonpCallback: jsonpCallback,
+            success: function(data) {
+              var label, suggestions, user, value, _j, _len1;
+              suggestions = [];
+              for (_j = 0, _len1 = data.length; _j < _len1; _j++) {
+                user = data[_j];
+                label = user['fullname'];
+                value = user['user_id'];
+                suggestions.push({
+                  label: label,
+                  value: value
+                });
+              }
+              return response(suggestions);
             }
-            return response(suggestions);
           });
         }
       });
