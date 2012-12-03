@@ -1,37 +1,30 @@
 {% extends "master.html" %}
 {% block editor %}
 
-    <form name="fakeeditor" id="form1" >
-     <fieldset name="Editor" > 
+<form name="fakeeditor" id="form1" >
+  <fieldset name="Editor" > 
 
- <div class="btn-toolbar">
-  <div class="btn-group"> 
-   <a href="#" id="savemodule" class="btn btn-inverse btn-mini nolink">
-     <i class="icon-white icon-hdd"></i>Save</a>
-   <a href="#" id="newmodule" class="btn btn-inverse btn-mini nolink">
-     <i class="icon-white icon-file"></i> New</a>
+    <div class="btn-toolbar">
+      <div class="btn-group"> 
+        <a href="#" id="savemodule" class="btn btn-inverse btn-mini nolink">
+          <i class="icon-white icon-hdd"></i>Save</a>
+        <a href="#" id="newmodule" class="btn btn-inverse btn-mini nolink">
+          <i class="icon-white icon-file"></i> New</a>
 
-
-   {% if confd['rhaptos2repo']['persona_on_toggle'] == 'True' %}
-   <a href="#" id="testbtn" class="btn btn-inverse btn-mini nolink">
-     <i class="icon-white"></i>development testing</a>
+        {% if confd['rhaptos2repo']['persona_on_toggle'] == 'True' %}
+        <a href="#" id="testbtn" class="btn btn-inverse btn-mini nolink">
+          <i class="icon-white"></i>development testing</a>
    
-   <a href="#" id="persona_signin" class="btn btn-inverse btn-mini nolink">
-     <i class="icon-white"></i>Persona Signin</a>
-   <a href="#" id="persona_signout" class="btn btn-inverse btn-mini nolink">
-     <i class="icon-white"></i>Persona signout</a>
-   {% else %}
-   
-   {% endif %}
+        <a href="#" id="persona_signin" class="btn btn-inverse btn-mini nolink">
+          <i class="icon-white"></i>Persona Signin</a>
+        <a href="#" id="persona_signout" class="btn btn-inverse btn-mini nolink">
+          <i class="icon-white"></i>Persona signout</a>
+        {% endif %}
+      </div>
+    </div>
 
-
-  </div>
-</div>
-
-    </fieldset>
-
-
-    </form>
+  </fieldset>
+</form>
 
 <!-- ================= -->
 <!--  Toolbar Buttons  -->
@@ -105,9 +98,9 @@
 <!-- ====================== -->
 <!--  The Editable Content  -->
 <!-- ====================== -->
-  <div class="document" id="editarea">
-    <h1>Linear and Time-Invariant Systems</h1>
-  </div>
+<div class="document" id="editarea">
+  <h1>Linear and Time-Invariant Systems</h1>
+</div>
 
 <hr/>
 <hr/>
