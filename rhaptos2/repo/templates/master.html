@@ -32,6 +32,8 @@
     {# Global Javascript that shouldn't be overridden. #}
     <script src="https://login.persona.org/include.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.js"></script>
+    <script src="//{{ confd['rhaptos2repo']['www_server_name'] }}/settings.js"
+            type="text/javascript"></script>
     {% endblock %}
 
     {% block js %}
@@ -79,8 +81,6 @@
     <script src="/static/js/languagelib.js" 
             type="text/javascript"></script>
 
-    <script src="http://{{ confd['rhaptos2repo']['www_server_name'] }}/conf.js"
-            type="text/javascript"></script>
     <script src="http://{{ confd['rhaptos2repo']['www_server_name'] }}/static/authortools_client_templates.js"
             type="text/javascript"></script>
     <script src="http://{{ confd['rhaptos2repo']['www_server_name'] }}/static/authortools_client_tools.js"

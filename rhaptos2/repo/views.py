@@ -99,9 +99,9 @@ def serve_other_thirdpartycss(filename):
 ##### /thirdparty static files
 
 
-@app.route('/conf.js')
+@app.route('/settings.js')
 def confjs():
-    resp = flask.make_response(render_template("conf.js", confd=app.config))
+    resp = flask.make_response(render_template("settings.js", confd=app.config))
     resp.content_type='application/javascript'
     return resp
 
