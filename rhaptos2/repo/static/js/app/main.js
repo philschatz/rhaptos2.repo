@@ -21,14 +21,15 @@
     app = {
       root: '/',
       containerId: 'main',
-      layout: void 0,
-      useLayout: function(name) {
+      layouts: {},
+      useLayout: function(name, type) {
         var layout;
-        if (this.layout && this.layout.options.template === name) {
-          return this.layout;
+        layout = this.layouts[type];
+        if (layout && layout.options.template === name) {
+          return layout;
         }
-        if (this.layout) {
-          this.layout.remove();
+        if (layout) {
+          layout.remove();
         }
         layout = new Backbone.Layout({
           template: name,
@@ -36,9 +37,9 @@
           className: 'layout'
         });
         $("#" + this.containerId).empty().append(layout.el);
-        this.layout = layout;
-        this.layout.render();
-        return this.layout;
+        layout.render();
+        this.layouts[type] = layout;
+        return this.layouts[type];
       }
     };
     JST = window.JavaScriptTemplateCache = window.JavaScriptTemplateCache || {};
@@ -75,10 +76,10 @@
         layout = void 0;
         if (authenticated) {
           console.log('user is authenticated');
-          return app.useLayout('authenticated-layout');
+          return app.useLayout('authenticated-layout', 'content');
         } else {
           console.log('user is NOT authenticated');
-          return app.useLayout('non-authenticated-layout');
+          return app.useLayout('non-authenticated-layout', 'content');
         }
       };
 

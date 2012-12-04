@@ -15,17 +15,19 @@ require(['jquery', 'lib/backbone', 'lib/mustache', '!lib/backbone.layoutmanager'
   app = {
     root: '/'
     containerId: 'main'
-    layout: undefined
-    useLayout: (name) ->
-      # Use a layout. See also the Backbone.LayoutManager.configure statement
-      #   for this application.
+    layouts: {}
+    useLayout: (name, type) ->
+      # Use a named layout. See also the Backbone.LayoutManager.configure
+      #   statement for details about how the layout's are acquired.
+      # The layout type corresponds with various layout sections of the page.
+      layout = @layouts[type]
 
       # If already using this layout, then don't reinitialize it.
-      if (@layout and @layout.options.template == name)
-        return @layout
+      if (layout and layout.options.template == name)
+        return layout
       # If a layout is active/in-place, deactive/remove it from the DOM.
-      if (@layout)
-        @layout.remove()
+      if (layout)
+        layout.remove()
       # Put the named layout in place.
       layout = new Backbone.Layout({
         template: name
@@ -34,9 +36,9 @@ require(['jquery', 'lib/backbone', 'lib/mustache', '!lib/backbone.layoutmanager'
       })
       # Insert into the DOM.
       $("##{@containerId}").empty().append(layout.el)
-      @layout = layout
-      @layout.render()
-      return @layout
+      layout.render()
+      @layouts[type] = layout
+      return @layouts[type]
   }
 
   JST = window.JavaScriptTemplateCache = window.JavaScriptTemplateCache || {}
@@ -65,11 +67,11 @@ require(['jquery', 'lib/backbone', 'lib/mustache', '!lib/backbone.layoutmanager'
       if (authenticated)
         # Initialize layout workspace
         console.log('user is authenticated')
-        app.useLayout('authenticated-layout')
+        app.useLayout('authenticated-layout', 'content')
       else
         # Initialize login
         console.log('user is NOT authenticated')
-        app.useLayout('non-authenticated-layout')
+        app.useLayout('non-authenticated-layout', 'content')
 
   app.router = new Router()
 
