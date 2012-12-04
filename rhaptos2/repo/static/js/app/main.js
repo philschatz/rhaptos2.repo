@@ -12,9 +12,45 @@
 
 
 (function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   require(['jquery', 'lib/backbone', 'lib/underscore', '!lib/bootstrap'], function($, Backbone, _) {
-    return console.log('loaded: main');
+    var Router, app;
+    console.log('loaded: main');
+    app = {
+      root: '/'
+    };
+    Router = (function(_super) {
+
+      __extends(Router, _super);
+
+      function Router() {
+        return Router.__super__.constructor.apply(this, arguments);
+      }
+
+      Router.prototype.routes = {
+        '': 'index'
+      };
+
+      Router.prototype.index = function() {
+        var authenticated;
+        authenticated = false;
+        if (authenticated) {
+          return console.log('user is authenticated');
+        } else {
+          return console.log('user is NOT authenticated');
+        }
+      };
+
+      return Router;
+
+    })(Backbone.Router);
+    app.router = new Router();
+    return Backbone.history.start({
+      pushState: true,
+      root: app.root
+    });
   });
 
 }).call(this);

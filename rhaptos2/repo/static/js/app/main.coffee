@@ -12,4 +12,26 @@ require(['jquery', 'lib/backbone', 'lib/underscore', '!lib/bootstrap'], ($, Back
 
   console.log('loaded: main')
 
+  app = {root: '/'}
+
+  class Router extends Backbone.Router
+    routes:
+      '': 'index'
+
+    index: ->
+      # Check for authentication...
+      authenticated = false
+
+      if (authenticated)
+        # Initialize layout workspace
+        console.log('user is authenticated')
+      else
+        # Initialize login
+        console.log('user is NOT authenticated')
+
+  app.router = new Router()
+
+  # Initialize history for in-place application view routing.
+  Backbone.history.start({ pushState: true, root: app.root });
+
 )
