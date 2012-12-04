@@ -10,7 +10,7 @@
 
 require(['jquery', 'lib/backbone', 'lib/mustache', '!lib/backbone.layoutmanager', '!lib/bootstrap', 'domReady!'], ($, Backbone, Mustache) ->
 
-  console.log('loaded: main')
+  console.log('Loaded: main')
 
   app = {
     root: '/'
@@ -29,6 +29,7 @@ require(['jquery', 'lib/backbone', 'lib/mustache', '!lib/backbone.layoutmanager'
       if (layout)
         layout.remove()
       # Put the named layout in place.
+      console.log("Initializing the '#{name}' layout.")
       layout = new Backbone.Layout({
         template: name
         id: 'layout'
@@ -66,11 +67,11 @@ require(['jquery', 'lib/backbone', 'lib/mustache', '!lib/backbone.layoutmanager'
       layout = undefined
       if (authenticated)
         # Initialize layout workspace
-        console.log('user is authenticated')
+        console.log('User is authenticated')
         app.useLayout('authenticated-layout', 'content')
       else
         # Initialize login
-        console.log('user is NOT authenticated')
+        console.log('User is NOT authenticated')
         app.useLayout('non-authenticated-layout', 'content')
 
   app.router = new Router()

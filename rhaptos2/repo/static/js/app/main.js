@@ -17,7 +17,7 @@
 
   require(['jquery', 'lib/backbone', 'lib/mustache', '!lib/backbone.layoutmanager', '!lib/bootstrap', 'domReady!'], function($, Backbone, Mustache) {
     var JST, Router, app;
-    console.log('loaded: main');
+    console.log('Loaded: main');
     app = {
       root: '/',
       containerId: 'main',
@@ -31,6 +31,7 @@
         if (layout) {
           layout.remove();
         }
+        console.log("Initializing the '" + name + "' layout.");
         layout = new Backbone.Layout({
           template: name,
           id: 'layout',
@@ -75,10 +76,10 @@
         authenticated = false;
         layout = void 0;
         if (authenticated) {
-          console.log('user is authenticated');
+          console.log('User is authenticated');
           return app.useLayout('authenticated-layout', 'content');
         } else {
-          console.log('user is NOT authenticated');
+          console.log('User is NOT authenticated');
           return app.useLayout('non-authenticated-layout', 'content');
         }
       };
