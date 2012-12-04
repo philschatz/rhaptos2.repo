@@ -15,6 +15,8 @@ require.config({
         /* zepto: '', */
         jquery: '//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery',
         jqueryui: '//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min',
+        // Plugin paths, exception to the rule...
+        domReady: '../lib/domReady',
     },
     shim: {
         'lib/backbone': {
