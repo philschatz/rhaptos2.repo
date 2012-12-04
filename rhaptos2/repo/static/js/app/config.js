@@ -24,6 +24,12 @@ require.config({
             deps: ['jquery', 'lib/underscore'],
             exports: 'Backbone',
         },
+        'lib/backbone.layoutmanager': {
+            deps: ['lib/backbone'],
+        },
+        'lib/mustache': {
+            exports: 'Mustache',
+        },
         'lib/bootstrap': {
             deps: ['jquery'],
             exports: 'bootstrap',
