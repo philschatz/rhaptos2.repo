@@ -108,7 +108,7 @@ def confjs():
 @app.route('/')
 def index():
     dolog("INFO", "THis is request %s" % g.requestid)
-    return render_template('index.html', confd=app.config)
+    return render_template('master.html', confd=app.config)
 
 
 
