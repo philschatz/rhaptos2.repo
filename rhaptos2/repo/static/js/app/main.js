@@ -15,12 +15,48 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  require(['jquery', 'lib/backbone', 'lib/underscore', '!lib/bootstrap'], function($, Backbone, _) {
-    var Router, app;
+  require(['jquery', 'lib/backbone', 'lib/mustache', '!lib/backbone.layoutmanager', '!lib/bootstrap', 'domReady!'], function($, Backbone, Mustache) {
+    var JST, Router, app;
     console.log('loaded: main');
     app = {
-      root: '/'
+      root: '/',
+      containerId: 'main',
+      layout: void 0,
+      useLayout: function(name) {
+        var layout;
+        if (this.layout && this.layout.options.template === name) {
+          return this.layout;
+        }
+        if (this.layout) {
+          this.layout.remove();
+        }
+        layout = new Backbone.Layout({
+          template: name,
+          id: 'layout',
+          className: 'layout'
+        });
+        $("#" + this.containerId).empty().append(layout.el);
+        this.layout = layout;
+        this.layout.render();
+        return this.layout;
+      }
     };
+    JST = window.JavaScriptTemplateCache = window.JavaScriptTemplateCache || {};
+    Backbone.LayoutManager.configure({
+      prefix: '/static/templates/',
+      fetch: function(path) {
+        var done;
+        path = "" + path + ".html";
+        if (!JST[path]) {
+          done = this.async();
+          return $.ajax({
+            url: path,
+            async: false
+          }).then(done);
+        }
+      },
+      render: Mustache.to_html
+    });
     Router = (function(_super) {
 
       __extends(Router, _super);
@@ -34,12 +70,15 @@
       };
 
       Router.prototype.index = function() {
-        var authenticated;
+        var authenticated, layout;
         authenticated = false;
+        layout = void 0;
         if (authenticated) {
-          return console.log('user is authenticated');
+          console.log('user is authenticated');
+          return app.useLayout('authenticated-layout');
         } else {
-          return console.log('user is NOT authenticated');
+          console.log('user is NOT authenticated');
+          return app.useLayout('non-authenticated-layout');
         }
       };
 
