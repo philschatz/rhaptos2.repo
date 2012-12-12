@@ -25,6 +25,8 @@
     var PERSONALOGOUT = 'http://' + FROZONE.e2repoFQDN + '/persona/logout/';
 
 
+var WORKSPACE = '<table class="table table-condensed table-hover table-striped" > {{#modules}}<tr><td><a class="nolink" href="#" onclick="getLoadHistoryVer(' + "'" + '{{module_id}}' + "'" + ');" >{{module_title}}</a></td><td> <a class="nolink" href="#" onclick="delete_module('+"'"+'{{module_id}}'+"'"+');" >(Delete) </a> </td></tr>{{/modules}}';
+
 
     function logger(msg) {
         //log both to console and to web page,
@@ -236,8 +238,7 @@ function getLoadHistoryVer(uuid) {
 function build_workspace() {
 
     logger("In build workspace");
-    var jsond = '[';
-    var htmlfrag = '<table class="table table-condensed table-hover table-striped" >';
+    
     $.ajax({
         type: 'GET',
         dataType: 'json',
@@ -246,26 +247,13 @@ function build_workspace() {
             withCredentials: true
         },  
         success: function(historyarr) {
-            historyarr.sort();
+            historyarr["modules"].sort();
             if (historyarr.length == 0){
                 logger("Not logged in - no workspace to deal with");
                                       }
             else {
-
-                $.each(historyarr, function(i, elem) {
-                    var strelem = "'" + elem[0] + "'";
-                      
-                    htmlfrag += '<tr><td><a class="nolink" href="#" onclick="getLoadHistoryVer(' + strelem + ');" >' + elem[1] + '</a></td>' + '<td><a class="nolink" href="#" onclick="delete_module(' + strelem + ');" >(Delete)</a></td></tr>';
-                    jsond += '{"data": "' + elem[1] + '", "attr": {"id": "' + elem[0] + '"}, "state": "closed"},';
-                });
-
-
-                x = jsond.length - 1;
-                y = jsond.substring(0, x);
-                jsond = y + ']';
-                //jsond += ']"';
+                htmlfrag = Mustache.to_html(WORKSPACE, historyarr); 
                 logger("Building workspace :" + htmlfrag);
-                logger(jsond);
                 $('#workspaces').html(htmlfrag);
             }
         }

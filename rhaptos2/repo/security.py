@@ -70,7 +70,7 @@ class WorkSpace(object):
         self.user_id = user_id
         repodir = app.config['repodir']
         plain = []
-        annotated = []
+        annotated = {"modules":[]}
         files = [os.path.join(repodir, f)
                  for f in os.listdir(repodir)
                  # Check for the file extension.
@@ -82,9 +82,11 @@ class WorkSpace(object):
                 ndoc.load_from_file(fpath)
                 if user_id in ndoc.contentrw:
                     plain.append(os.path.basename(fpath))
-                    annotated.append([os.path.basename(fpath),
-                                     ndoc.title
-                                     ])
+                    annotated["modules"].append(
+                                     {"module_id":os.path.basename(fpath),
+                                      "module_title":ndoc.title
+                                     }
+                                         )
         self.files_plain = plain
         self.files_annotated = annotated
 
